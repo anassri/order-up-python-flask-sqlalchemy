@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Order up!</h1>
+    <form id="menu-items" method="POST" action="/">    
+        {{ form.csrf_token }}
+        <ul>
+            <li>{{ form.french_fries.label }} {{ form.french_fries }}</li>
+            <li>{{ form.dr_pepper.label }} {{ form.dr_pepper }}</li>
+            <li>{{ form.jambalaya.label }} {{ form.jambalaya }}</li>
+        </ul>
+
+        <ul>
+            {% for table in tables  %}
+            <li> Table {{ table.number }}, capacity: {{ table.capacity }}, ${{ table.orders[0].details[0].price if table.orders[0] }} </li>
+            {% if table.orders[0] and not table.orders[0].finished %}
+            <button>CLOSE TABLE</button>
+            {% endif %}
+
+            <button form="menu-items" formaction="/table/{{ table.id }}">ADD TO ORDER</button>
+
+
+            {% endfor %}
+        </ul>
+    </form>
+
+{% endblock %}
